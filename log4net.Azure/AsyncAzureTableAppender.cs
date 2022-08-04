@@ -163,7 +163,7 @@ namespace log4net.Appender
             var eventEntity = entity as AzureDynamicLoggingEventEntity;
             if (eventEntity != null)
             {
-                return (string)eventEntity["message"];
+                return eventEntity["message"].ToString();
             }
             var layoutEvent = entity as AzureLayoutLoggingEventEntity;
             if (layoutEvent != null)
