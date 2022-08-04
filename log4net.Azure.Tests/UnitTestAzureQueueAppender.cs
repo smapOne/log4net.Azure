@@ -27,7 +27,7 @@ namespace log4net.Azure.Tests
         {
             var @event = MakeEvent();
 
-            _appender.DoAppend(@event);            
+            _appender.DoAppend(@event);
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace log4net.Azure.Tests
                     LoggerName = "testLoggerName",
                     Message = "testMessage",
                     ThreadName = "testThreadName",
-                    TimeStamp = DateTime.UtcNow,
+                    TimeStampUtc = DateTime.UtcNow,
                     UserName = "testUsername",
                     LocationInfo = new LocationInfo("className", "methodName", "fileName", "lineNumber")
                 }

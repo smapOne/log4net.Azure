@@ -48,7 +48,7 @@ namespace log4net.Azure.Tests
                     LoggerName = "testLoggerName",
                     Message = "Long message - " + string.Join("-", Enumerable.Range(0,1024).Select(i => "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm")),
                     ThreadName = "testThreadName",
-                    TimeStamp = DateTime.UtcNow,
+                    TimeStampUtc = DateTime.UtcNow,
                     UserName = "testUsername",
                     LocationInfo = new LocationInfo("className", "methodName", "fileName", "lineNumber")
                 });
@@ -106,7 +106,7 @@ namespace log4net.Azure.Tests
                         LoggerName = "testLoggerName",
                         Message = "testMessage",
                         ThreadName = "testThreadName",
-                        TimeStamp = DateTime.UtcNow,
+                        TimeStampUtc = DateTime.UtcNow,
                         UserName = "testUsername",
                         LocationInfo = new LocationInfo("className", "methodName", "fileName", "lineNumber")
                     }
