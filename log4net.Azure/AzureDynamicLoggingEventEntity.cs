@@ -12,24 +12,32 @@ namespace log4net.Appender
             this["Identity"] = e.Identity;
             this["Level"] = e.Level.ToString();
             this["LoggerName"] = e.LoggerName;
-            this["Message"] = e.RenderedMessage + Environment.NewLine + e.GetExceptionString();
+            this["Message"] = LimitEntryLength(e.RenderedMessage + Environment.NewLine + e.GetExceptionString());
             this["EventTimeStamp"] = e.TimeStamp;
             this["ThreadName"] = e.ThreadName;
             this["UserName"] = e.UserName;
-            this["Location"] = e.LocationInformation.FullInfo;
+            this["Location"] = LimitEntryLength(e.LocationInformation.FullInfo);
 
             if (e.ExceptionObject != null)
             {
-                this["Exception"] = e.ExceptionObject.ToString();
+                this["Exception"] = LimitEntryLength(e.ExceptionObject.ToString());
             }
-            
+
             foreach (DictionaryEntry entry in e.Properties)
             {
                 var key = entry.Key.ToString()
                     .Replace(":", "_")
                     .Replace("@", "_")
                     .Replace(".", "_");
-                this[key] = entry.Value;
+
+                // Ensure Message is < 32KB
+                var entryValue = entry.Value;
+                if (entryValue is string value )
+                {
+                    entryValue = LimitEntryLength(value);
+                }
+
+                this[key] = entryValue;
             }
 
             Timestamp = e.TimeStamp;
@@ -39,8 +47,18 @@ namespace log4net.Appender
 
         public AzureDynamicLoggingEventEntity(LoggingEvent e, PartitionKeyTypeEnum partitionKeyType, string message, int sequenceNumber) : this(e, partitionKeyType)
         {
-            this["Message"] = message;
+            this["Message"] = LimitEntryLength(message);
             this["SequenceNumber"] = sequenceNumber;
+        }
+
+        private string LimitEntryLength(string entry)
+        {
+            if (entry.Length > 30 * 1024)
+            {
+                return entry.Substring(0, 30 * 1024) + " [TRUNCATED]";
+            }
+
+            return entry;
         }
     }
 }
